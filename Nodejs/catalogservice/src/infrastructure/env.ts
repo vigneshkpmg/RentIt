@@ -13,10 +13,10 @@ export default class environment {
 	 */
 	public static config(): any{
 		if(process.env)
-		dotenv.config({ path: path.join(__dirname, `../${process.env.NODE_ENV}.env`) });
+			dotenv.config({ path: `${process.env.NODE_ENV}.env` });
 
 		const url = process.env.APP_URL || `http://localhost:${process.env.PORT}`;
-		const port = process.env.PORT || 7000;
+		const port = process.env.PORT || 7001;
 		const appSecret = process.env.APP_SECRET || 'This is your responsibility!';
 		const mongooseUrl = process.env.MONGOOSE_URL;
 		const maxUploadLimit = process.env.APP_MAX_UPLOAD_LIMIT || '50mb';

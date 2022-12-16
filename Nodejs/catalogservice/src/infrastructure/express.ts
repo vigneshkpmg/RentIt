@@ -4,7 +4,8 @@ import environment from './env';
 import router from '../router/catalogRouter';
 import cors from "cors";
 import helmet from "helmet";
-import * as morgan from "morgan";
+import logger from "../infrastructure/logger"
+
 import * as winston from "winston";
 import * as winstonExpress from "express-winston";
 
@@ -30,48 +31,46 @@ class Express {
 		this.express = environment.init(this.express);
 	}
 
+
 	/**
 	 * Mounts all the defined middlewares
 	 */
-	private mountMiddlewares (): void {
+	private mountMiddlewares(): void {
 		// this.express = Bootstrap.init(this.express);
-            this.express.use(helmet());
-            this.express.use(cors());
-            this.express.use(express.json());
-            this.express.use(morgan.default("combined"));
-            const loggerOptions: winstonExpress.LoggerOptions = {
-                transports: [new winston.transports.Console()],
-                format: winston.format.combine(
-                    winston.format.json(),
-                    winston.format.prettyPrint(),
-                    winston.format.colorize({ all: true })
-                ),
-            };
-
-            if (!process.env.DEBUG) {
-                loggerOptions.meta = false; // when not debugging, log requests as one-liners
-            }
+		this.express.use(helmet());
+		this.express.use(cors());
+		this.express.use(express.json());
+		// this.express.use(morgan.default("combined"));		
+		this.express.use(winstonExpress.logger({
+			transports: [
+				new winston.transports.Console()
+			],
+			format: winston.format.combine(
+				winston.format.colorize(),
+				winston.format.json()
+			),
+			meta: true, // optional: control whether you want to log the meta data about the request (default to true)
+			msg: "HTTP {{req.method}} {{req.url}}", // optional: customize the default logging message. E.g. "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
+			expressFormat: true, // Use the default Express/morgan request formatting. Enabling this will override any msg if true. Will only output colors with colorize set to true
+			colorize: true // Color the text and status code, using the Express/morgan color palette (text: gray, status: default green, 3XX cyan, 4XX yellow, 5XX red).
+		}));
 	}
+		
+	
 
 	/**
 	 * Mounts all the defined routes
 	 */
-	private mountRoutes (): void {
-		this.express.use(`/${environment.config().apiPrefix}`, router);
+	private mountRoutes(): void {
+		this.express.use(`/${environment.config().apiPrefix}/catalog`, router);
 	}
+	
 
 	/**
 	 * Starts the express server
 	 */
 	public init (): void {
 		const port: number = environment.config().port;
-
-		// Registering Exception / Error Handlers
-		// this.express.use(ExceptionHandler.logErrors);
-		// this.express.use(ExceptionHandler.clientErrorHandler);
-		// this.express.use(ExceptionHandler.errorHandler);
-		// this.express = ExceptionHandler.notFoundHandler(this.express);
-
 		// Start the server on the specified port
 		this.express.listen(port, () => {
 			return console.log('\x1b[33m%s\x1b[0m', `Server :: Running @ 'http://localhost:${port}'`);

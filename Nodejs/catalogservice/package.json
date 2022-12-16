@@ -10,6 +10,8 @@
     "prod": "tsc --project './tsconfig.json' & NODE_ENV=production node dist"
   },
   "devDependencies": {
+    "@types/mongoose": "^5.11.97",
+    "@types/morgan": "^1.9.3",
     "@types/cors": "^2.8.13",
     "@types/debug": "^4.1.7",
     "@types/dotenv": "^8.2.0",
@@ -29,13 +31,13 @@
     "typescript": "^4.9.4"
   },
   "dependencies": {
-    "@types/morgan": "^1.9.3",
     "cors": "^2.8.5",
     "debug": "^4.3.4",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-winston": "^4.2.0",
     "helmet": "^6.0.1",
+    "mongoose": "^6.8.0",
     "morgan": "^1.10.0",
     "winston": "^3.8.2"
   }
