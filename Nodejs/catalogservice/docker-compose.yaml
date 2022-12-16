@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  redis:
+    container_name: catalogService-redis
+    image: redis:latest
+  mongo:
+    container_name: catalogService-mongo
+    image: mongo:latest
+  app:
+    container_name: catalogService
+    depends_on:
+      - mongo
+      - redis

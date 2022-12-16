@@ -1,0 +1,26 @@
+version: "3.9"
+services:
+  mongo:
+    restart: always
+    volumes:
+      - ./data:/data/db
+    ports:
+      - 27017:27017
+  app:
+    container_name: catalogService
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    env_file: development.env
+    ports:
+      - 7000:7000
+    depends_on:
+      - mongo
+      - redis
+  redis:
+    ports:
+      - 6379:6379
+    restart: always
+    volumes:
+      - ./data:/data/redis
