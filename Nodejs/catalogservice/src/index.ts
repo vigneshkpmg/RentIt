@@ -1,5 +1,5 @@
-import express from "./infrastructure/express"
-import database from "./infrastructure/database";
+import express from "./infrastructure/provider/express"
+import database from "./infrastructure/provider/database";
 
 class StartUp{
 

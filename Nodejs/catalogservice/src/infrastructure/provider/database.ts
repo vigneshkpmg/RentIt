@@ -17,4 +17,4 @@ export default class database{
     }
 }
 
-export {mongoose}
+export  {mongoose}

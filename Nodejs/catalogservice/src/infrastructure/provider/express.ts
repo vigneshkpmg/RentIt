@@ -1,13 +1,12 @@
 import express from 'express';
 
 import environment from './env';
-import router from '../router/catalogRouter';
+import router from '../../router/catalogRouter';
 import cors from "cors";
 import helmet from "helmet";
-import logger from "../infrastructure/logger"
-
 import * as winston from "winston";
 import * as winstonExpress from "express-winston";
+
 
 
 class Express {
