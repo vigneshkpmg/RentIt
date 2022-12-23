@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 class mediaController {
 
     public async saveMedia(req: any, res: any): Promise<any> {
-        try {       
+        try {    
             const containerName = `rentitmedia-image-${uuidv4()}`;
             const AZURE_STORAGE_CONNECTION_STRING = environment.config().azureStorageConnectionString;
             if (!AZURE_STORAGE_CONNECTION_STRING) {

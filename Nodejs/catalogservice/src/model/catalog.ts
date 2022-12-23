@@ -6,13 +6,15 @@ const catalogSchema = new mongoose.Schema<IEquipmentCatalog>({
     additionalDetails: Schema.Types.Mixed,
     sellerReferenceId: { type: String, require: [true, "Required"] },
     title: { type: String, require: [true, "Required"] },
-    mediaUrl: { type: String, require: [true, "Required"] },
+    mediaContainer: { type: String, require: [true, "Required"] },
     availabilityStartDate: { type: Date, require: [true, "Required"] },
     equipmentRentPrice: { type: Number, require: [true, "Required"] },
     isOperatorAvailable: { type: Boolean, default: false },
     operatorPrice: { type: Number },
+    operatorCount: { type: Number },
     description: { type: String, required: [true, "Required"] },
-    catalogType: {type:String, required:[true,"Required"]}
+    catalogType: { type: String, required: [true, "Required"] },
+    quantity: {type:Number, required:[true,"Required"]}
 }, {strict:false})
 
 interface Icatalog{
@@ -21,14 +23,16 @@ interface Icatalog{
     title: string,
     description: string,
     availabilityStartDate: Date,
-    mediaUrl: string,
-    additionalDetails:IadditionalDetails
+    mediaContainer: string,
+    additionalDetails: IadditionalDetails,
+    quantity:number
 }
 
 interface IEquipmentCatalog extends Icatalog  {
     equipmentRentPrice: number,
     isOperatorAvailable: boolean,
-    operatorPrice:Number
+    operatorPrice: Number,
+    operatorCount: Number
 }
 
 interface IadditionalDetails{

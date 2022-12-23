@@ -28,11 +28,7 @@ class catalogController{
      }
     
     public async createCatalogItem(req: express.Request, res: express.Response): Promise<any> {
-        const quantity = req.body.quantity;
-        const catalogList = [];
         try {
-            //Todo: Need to save media and get the url.
-            for (let index = 0; index < quantity; index++) {
                 const catalogInstance = new catalog({
                     title: req.body.title,
                     availabilityStartDate: req.body.availabilityStartDate,
@@ -43,11 +39,12 @@ class catalogController{
                     isOperatorAvailable: req.body.isOperatorAvailable,
                     operatorPrice: req.body.operatorPrice,
                     additionalDetails: req.body.additionalDetails,
-                    mediaUrl: ""
+                    mediaContainer: req.body.mediaContainer,
+                    quantity: req.body.quantity,
+                    operatorCount:req.body.operatorCount
                 });
-                catalogList.push(catalogInstance);
-            }
-            const result = await catalog.bulkSave(catalogList);
+
+            const result = await catalogInstance.save();
             return res.status(201).send(result);
         }
         catch (error) {
@@ -59,20 +56,8 @@ class catalogController{
     public async updateCatalogItemById(req: express.Request, res: express.Response): Promise<any>{
         try {
             const id = req.params.id;
-            const catalogInstance = new catalog({
-                    title: req.body.title,
-                    availabilityStartDate: req.body.availabilityStartDate,
-                    description: req.body.description,
-                    sellerReferenceId: req.body.sellerReferenceId,
-                    equipmentRentPrice: req.body.equipmentRentPrice,
-                    catalogType: req.body.catalogType,
-                    isOperatorAvailable: req.body.isOperatorAvailable,
-                    operatorPrice: req.body.operatorPrice,
-                    additionalDetails: req.body.additionalDetails,
-                    mediaUrl: ""
-            });
-           const result = await catalog.findByIdAndUpdate(id, catalogInstance, {overwrite:true});
-           return res.status(200).send(result);
+            await catalog.findByIdAndUpdate(id, req.body,{overwrite:true});
+            return res.status(200).send();
         }
         catch (error) {
             logger.error("Error while updating catalog by id", error);
@@ -96,8 +81,8 @@ class catalogController{
          try {
              const id = req.params.id;
              const request = req.body;
-             const result = await catalog.findByIdAndUpdate(id, request);
-             return res.status(200).send(result);
+             await catalog.findByIdAndUpdate(id, request);
+             return res.status(200).send();
          }
          catch (error) {
              logger.error("Error while patching catalog by id", error);

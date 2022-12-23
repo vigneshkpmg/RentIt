@@ -10,8 +10,9 @@ class validator{
             body('availabilityStartDate').exists().isDate({format:"YYYY-MM-DD"}),
             body('equipmentRentPrice').exists().isDecimal(),
             body('description').exists().isString().notEmpty(),
-            body('quantity').exists().isInt({ min: 1 }),
-            body('catalogType').exists().isString().notEmpty()
+            body('mediaContainer').exists().isString().notEmpty(),
+            body('catalogType').exists().isString().notEmpty(),
+            body('quantity').exists().isInt({min:1})
         ];
     } 
     
