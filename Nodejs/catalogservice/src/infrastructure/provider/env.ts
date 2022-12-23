@@ -42,6 +42,8 @@ export default class environment {
 		const redisHttpHost = process.env.REDIS_QUEUE_HOST || '127.0.0.1';
 		const redisPrefix = process.env.REDIS_QUEUE_DB || 'q';
 		const redisDB = process.env.REDIS_QUEUE_PREFIX || 3;
+		const azureStorageAccount = process.env.AZURE_STORAGE_ACCOUNT_NAME || "rentitmedia";
+		const azureStorageConnectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
 
 		return {
 			appSecret,
@@ -64,7 +66,9 @@ export default class environment {
 			redisPrefix,
 			url,
 			queueMonitor,
-			queueMonitorHttpPort
+			queueMonitorHttpPort,
+			azureStorageAccount,
+			azureStorageConnectionString
 		};
 	}
 

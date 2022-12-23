@@ -1,7 +1,8 @@
 import express from 'express';
 
 import environment from './env';
-import router from '../../router/catalogRouter';
+import catalogRouter from '../../router/catalogRouter';
+import mediaRouter from '../../router/mediaRouter';
 import cors from "cors";
 import helmet from "helmet";
 import * as winston from "winston";
@@ -61,7 +62,8 @@ class Express {
 	 * Mounts all the defined routes
 	 */
 	private mountRoutes(): void {
-		this.express.use(`/${environment.config().apiPrefix}/catalog`, router);
+		this.express.use(`/${environment.config().apiPrefix}/catalog`, catalogRouter);
+		this.express.use(`/${environment.config().apiPrefix}/media`, mediaRouter);
 	}
 	
 
