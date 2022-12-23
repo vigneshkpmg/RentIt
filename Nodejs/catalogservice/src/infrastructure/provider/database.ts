@@ -7,12 +7,12 @@ export default class database{
     public static async Init(): Promise<void>{
         const mongooseUrl = env.config().mongooseUrl;
         try {
-            logger.info("Connecting to mongo db");
+            logger.info(`Connecting to mongo db: ${mongooseUrl}`);
             mongoose.set('strictQuery', true);
             await mongoose.connect(mongooseUrl);
             logger.info("Connected to mongo db");
-        } catch (error) {
-            logger.error("failed to connect to mongo db", error);          
+        } catch (error:any) {
+            logger.error(`failed to connect to mongo db: ${error}}`);          
         }
     }
 }
