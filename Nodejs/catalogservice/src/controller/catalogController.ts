@@ -1,12 +1,17 @@
 import express from "express";
 import logger from "../infrastructure/provider/logger";
 import catalog from "../model/catalog";
+import redis from "../infrastructure/provider/redis";
 
 class catalogController{
     
     public async getcatalogItems(req: express.Request, res: express.Response): Promise<any>{
         try { 
-            const catalogList = await catalog.find({});
+            let catalogList = await redis.getCachedData();
+            if (!catalogList) {
+                catalogList = await catalog.find({});
+                await redis.setCacheData(catalogList);
+            }
             return res.status(200).send({ data: catalogList });
         }
         catch (error) {
@@ -18,7 +23,11 @@ class catalogController{
      public async getCatalogItemById(req: express.Request, res: express.Response): Promise<any>{
          try {
              const id = req.params.id
-             const catalogData = await catalog.findById(id);
+             let catalogData = await redis.getCachedData(id);
+             if (!catalogData) {
+                 catalogData = await catalog.findById(id);
+                 await redis.setCacheData(catalogData, id);
+             }
              return res.status(200).send({ data: catalogData });
          }
          catch (error) {
@@ -45,6 +54,7 @@ class catalogController{
                 });
 
             const result = await catalogInstance.save();
+            await redis.deleteCacheData();
             return res.status(201).send(result);
         }
         catch (error) {
@@ -56,7 +66,8 @@ class catalogController{
     public async updateCatalogItemById(req: express.Request, res: express.Response): Promise<any>{
         try {
             const id = req.params.id;
-            await catalog.findByIdAndUpdate(id, req.body,{overwrite:true});
+            await catalog.findByIdAndUpdate(id, req.body, { overwrite: true });
+            await redis.deleteCacheData(id);
             return res.status(200).send();
         }
         catch (error) {
@@ -68,6 +79,7 @@ class catalogController{
     public async deleteCatalogItemById(req: express.Request, res: express.Response): Promise<any>{
         try {
             const result = await catalog.findByIdAndDelete(req.params.id);
+            await redis.deleteCacheData(req.params.id);
             return res.status(204).send(result);
 
         }
@@ -82,6 +94,7 @@ class catalogController{
              const id = req.params.id;
              const request = req.body;
              await catalog.findByIdAndUpdate(id, request);
+             await redis.deleteCacheData(id);
              return res.status(200).send();
          }
          catch (error) {
