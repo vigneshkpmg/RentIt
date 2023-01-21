@@ -3,7 +3,6 @@
  */
 
 import { Application } from 'express';
-import * as path from 'path';
 import * as dotenv from 'dotenv';
 
 export default class environment {
@@ -44,6 +43,7 @@ export default class environment {
 		const redisDB = process.env.REDIS_QUEUE_PREFIX || 3;
 		const azureStorageAccount = process.env.AZURE_STORAGE_ACCOUNT_NAME || "rentitmedia";
 		const azureStorageConnectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
+		const schemaRegistryUrl = process.env.SCHEMA_REGISTRY_URL;
 
 		return {
 			appSecret,
@@ -68,7 +68,8 @@ export default class environment {
 			queueMonitor,
 			queueMonitorHttpPort,
 			azureStorageAccount,
-			azureStorageConnectionString
+			azureStorageConnectionString,
+			schemaRegistryUrl
 		};
 	}
 

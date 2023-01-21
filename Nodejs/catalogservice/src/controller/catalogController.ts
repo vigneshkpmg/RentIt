@@ -1,7 +1,9 @@
 import express from "express";
 import logger from "../infrastructure/provider/logger";
-import catalog from "../model/catalog";
+import { catalog } from "../model/catalog";
 import redis from "../infrastructure/provider/redis";
+import productPricechanged from "../integrationEvents/events/productPriceChanged";
+import integrationEventService from "../integrationEvents/service/integrationEventService";
 
 class catalogController{
     
@@ -93,7 +95,17 @@ class catalogController{
          try {
              const id = req.params.id;
              const request = req.body;
-             await catalog.findByIdAndUpdate(id, request);
+             let catalogItem = await catalog.findById(id);
+             const isPriceChangeEventToBeRaised = catalogItem?.equipmentRentPrice != request?.equipmentRentPrice;
+             if (isPriceChangeEventToBeRaised) {
+                 const productPricechangedevent = new productPricechanged(catalogItem?.id, request?.equipmentRentPrice, catalogItem!.equipmentRentPrice);
+                await integrationEventService.saveEventAndCatalog(productPricechangedevent,{id:id, request:request});
+                await integrationEventService.publisheEvent(productPricechangedevent)
+
+             } else {
+                 await catalog.findByIdAndUpdate(id, request);
+             }
+             
              await redis.deleteCacheData(id);
              return res.status(200).send();
          }
