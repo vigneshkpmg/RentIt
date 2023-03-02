@@ -1,3 +1,6 @@
 KafkaConsumer/bin
 KafkaConsumer/obj
 .idea
+BasketService/.idea
+BasketService/bin
+BasketService/obj

@@ -1,0 +1,23 @@
+version: '3.9'
+
+services: 
+ redis:
+    container_name: basketService-redis
+    image: redis:latest
+    ports:
+      - 6379:6379
+    restart: always
+    volumes:
+        - ./data/redis:/data/redis
+ app:
+   container_name: basketService
+   restart: always
+   build:
+     context: .
+     dockerfile: Dockerfile
+   environment:
+     - ASPNETCORE_ENVIRONMENT=Development
+     - ASPNETCORE_URLS=http://0.0.0.0:80
+     
+   ports:
+     - "5000:5000"
