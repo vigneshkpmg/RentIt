@@ -13,10 +13,14 @@ This is unfinished project which would need lot of work!!
 5. Update environment file with azure blob storage connection string(Again applicable in case of storing image.).
 6. Run docker compose up which will download docker image and run the container.
 7. Then you can do npm run dev which should start server or even docker will start the server if you just want to test and don't want to debug.
+8. It uses Mongo Db with replica mode using docker to support Transaction.
+9. It uses Kafka for inter service communication.
+10. It uses redis as cache.
 
 ## Pending items
 
-1. Auth0 integration.
+1. Auth0 integration for authentication and authorization.
+2. Few for business use case as well.
 
 ## environment key's
 
